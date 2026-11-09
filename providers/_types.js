@@ -95,6 +95,12 @@
  *                               report it in canonical form: any normalization,
  *                               such as dropping an ATS repost suffix, happens in
  *                               the provider.
+ * @property {string} [workplaceType] The source's own structured work model
+ *                               when it exposes one (Ashby `workplaceType`:
+ *                               Remote/Hybrid/OnSite; Lever `workplaceType`:
+ *                               remote/hybrid/onsite), passed through as given.
+ *                               Not read by scan.mjs; the platform/ web app uses
+ *                               it to classify Remote / Hybrid / WFO.
  * @property {number} [trustScore] 0-100 trust score from _trust-validator.mjs.
  * @property {string[]} [trustFlags] Flags raised by trust validation (e.g.
  *                                   'invalid_url', 'suspicious_domain').

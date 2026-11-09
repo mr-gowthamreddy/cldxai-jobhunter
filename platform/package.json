@@ -1,0 +1,36 @@
+{
+  "name": "@career-ops/platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Career-Ops Platform: multi-user job search and career management web application built on the career-ops job providers.",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=23.4.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "migrate": "node scripts/migrate.mjs",
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "create-admin": "node scripts/create-admin.mjs",
+    "start": "node src/server.mjs",
+    "worker": "node src/worker.mjs",
+    "fetch-now": "node src/worker.mjs --once",
+    "dev": "node scripts/start-all.mjs",
+    "start:all": "node scripts/start-all.mjs",
+    "test": "node --test --test-concurrency=1 tests/"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.7",
+    "dotenv": "^18.0.10",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.3.0",
+    "js-yaml": "^5.5.0",
+    "mammoth": "^1.13.0",
+    "multer": "^2.5.0",
+    "nodemailer": "^10.4.0",
+    "pdfjs-dist": "^4.10.38",
+    "word-extractor": "^1.0.4"
+  }
+}

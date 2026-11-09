@@ -253,6 +253,9 @@ export default {
         ? { ats_provider: 'lever', board_slug: boardSlug, posting_id: j.id }
         : undefined,
       location: resolveLocation(j.categories, j.workplaceType),
+      // Structured work model ("remote" | "hybrid" | "onsite"), when set. Additive,
+      // like ashby.mjs's: scan.mjs ignores it.
+      ...(typeof j.workplaceType === 'string' && j.workplaceType.trim() && j.workplaceType.trim() !== 'unspecified' ? { workplaceType: j.workplaceType.trim() } : {}),
       // Lever's v0 postings list ships the full description for free (same
       // payload, no per-job request) — enables scan.mjs content_filter.
       description: leverDescription(j),

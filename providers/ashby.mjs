@@ -547,6 +547,11 @@ export default {
       // rather than guessed at.
       externalId: coerceId(j.id),
       location: formatLocation(j),
+      // The structured work model, when the board sets it ("Remote" | "Hybrid" |
+      // "OnSite"). Additive: scan.mjs ignores it; consumers that classify the
+      // work arrangement (the multi-user platform) read it instead of guessing
+      // from prose.
+      ...(typeof j.workplaceType === 'string' && j.workplaceType.trim() ? { workplaceType: j.workplaceType.trim() } : {}),
       // Ashby's posting-api list ships `descriptionPlain` for free (same
       // payload, no per-job request) — mirrors lever. Enables scan.mjs's
       // content_filter / visa_filter.
