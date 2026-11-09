@@ -17,11 +17,14 @@
 - Real fetch tested: 36 sources, 5,467 jobs, 0 failures, 157 duplicates detected.
 - Link verification tested (live link → active; dead Greenhouse ID → expired).
 - Provider improvement: ashby.mjs / lever.mjs now pass through `workplaceType` (additive).
-- Front-end: `public/css/app.css` design system written.
+- Front-end: design system (`public/css/app.css`), `index.html`, `js/api.js`, `js/ui.js`, `js/main.js` (router + shell),
+  `js/components.js`, pages: landing, auth (login/register/forgot/reset), dashboard, jobs (filters), job-detail,
+  recommendations, saved, applications (kanban/table/charts/export/manual add), application-detail.
+- Push blocked: GitHub linked but no writable repo yet. User wants to push to `<their-username>/cldxai-jobhunter`
+  (must be created empty + granted to the Claude GitHub App). Branch: `platform/multi-user-app`.
 
 ## Remaining
-1. Front-end JS: index.html, api/ui/router helpers, shell, pages (landing, auth, dashboard, jobs, job detail,
-   recommendations, saved, applications/kanban, resumes dropzone, profile/preferences, notifications, admin).
+1. Front-end pages still missing: resumes (dropzone), profile/preferences, notifications, admin console.
 2. Re-run the fetch after the arrangement-detection changes.
 3. Tests in `platform/tests/` (auth, isolation, uploads, matching, filters, dedup, link check, admin perms,
    scheduler, Sheets with mocked fetch, persistence) + a Playwright UI smoke test.
