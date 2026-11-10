@@ -2,7 +2,7 @@
 // a score with its explanation out. A user's matches are computed only from
 // that user's own resume data and preferences.
 
-import { canonicalSkill, CATEGORY_BY_SLUG } from './taxonomy.mjs';
+import { canonicalSkill, CATEGORY_BY_SLUG, CATEGORIES, categorize } from './taxonomy.mjs';
 
 const STOP = new Set(['and', 'or', 'the', 'of', 'for', 'to', 'in', 'a', 'an', 'with', 'at', 'on', 'senior', 'sr', 'junior', 'jr', 'lead', 'staff', 'principal', 'i', 'ii', 'iii', 'iv', 'remote', 'hybrid', 'manager', 'associate', 'head', '-', '&', 'level', 'mid']);
 // Skills where knowing one is strong evidence for a sibling (used for partial credit only).
@@ -39,8 +39,13 @@ export function buildCandidate({ resumeData, preferences }) {
   const years = prefs.experience_years ?? rd.total_experience_years ?? null;
   const relevantYears = rd.relevant_experience_years ?? years;
   const titles = [rd.current_role, ...(rd.job_titles || []), ...(prefs.desired_titles || [])].filter(Boolean);
+  // The candidate's own domains: from their titles and skills, plus followed categories.
+  const domains = new Set([...(prefs.categories || [])]);
+  for (const c of titleCategories(titles.join(' | '))) domains.add(c);
+  for (const c of categorize('', [...skills])) if (c !== 'other') domains.add(c);
   return {
     skills,
+    domains,
     years: years === null ? null : Number(years),
     relevantYears: relevantYears === null ? null : Number(relevantYears),
     titles,
@@ -51,6 +56,13 @@ export function buildCandidate({ resumeData, preferences }) {
     locations: (prefs.locations || []).map((l) => l.toLowerCase()),
     hasProfile: skills.size > 0 || titles.length > 0,
   };
+}
+
+/** Categories a job title names on its own (e.g. "Sales", "Data Engineering"). */
+export function titleCategories(title) {
+  const out = [];
+  for (const c of CATEGORIES) if (c.title && c.title.test(title || '')) out.push(c.slug);
+  return out;
 }
 
 function experienceFit(years, min, max) {
@@ -79,7 +91,10 @@ export function matchJob(candidate, job) {
 
   let skillScore = null;
   if (required.length) {
-    skillScore = (matching.length + 0.4 * partial.length) / required.length;
+    const coverage = (matching.length + 0.4 * partial.length) / required.length;
+    // Evidence weighting: 1 of 1 matched skills is weaker evidence than 6 of 8.
+    const evidence = Math.min(1, (matching.length + 0.4 * partial.length) / 5);
+    skillScore = 0.65 * coverage + 0.35 * evidence;
     if (preferred.length) skillScore = Math.min(1, skillScore + 0.1 * (matchingPreferred.length / preferred.length));
   }
 
@@ -99,9 +114,18 @@ export function matchJob(candidate, job) {
     prefScore = (prefScore + (locHit ? 1 : 0.2)) / 2;
   }
 
+  // Domain fit: a job whose title places it in a field the candidate has no
+  // footing in (e.g. Sales for a data engineer) is penalised even if it names
+  // one of their tools.
+  const jobDomains = titleCategories(job.title);
+  let domainFit;
+  if (jobDomains.length) domainFit = jobDomains.some((d) => candidate.domains.has(d)) ? 1 : 0.55;
+  else domainFit = titleScore > 0 ? 0.9 : 0.72;
+
   let score;
   if (skillScore === null) score = 0.55 * titleScore + 0.3 * exp.score + 0.15 * prefScore;
   else score = 0.55 * skillScore + 0.2 * exp.score + 0.2 * titleScore + 0.05 * prefScore;
+  score *= domainFit;
   if (!candidate.hasProfile) score = 0;
   const pct = Math.round(Math.max(0, Math.min(1, score)) * 100);
 
@@ -112,6 +136,7 @@ export function matchJob(candidate, job) {
   if (overlap.length) reasons.push(`The title matches your background (${[...new Set(overlap)].slice(0, 4).join(', ')}).`);
   if (catHit) reasons.push(`It is in a category you follow: ${(job.categories || []).filter((c) => candidate.categories.has(c)).map((c) => CATEGORY_BY_SLUG.get(c)?.name || c).join(', ')}.`);
   reasons.push(exp.note);
+  if (jobDomains.length && domainFit < 1) reasons.push(`It is a ${jobDomains.map((c) => CATEGORY_BY_SLUG.get(c)?.name || c).join(' / ')} role, outside the fields in your resume and preferences.`);
   if (!candidate.arrangements.has(job.work_arrangement)) reasons.push(`It is ${job.work_arrangement}, which is not in your preferred work arrangements.`);
 
   return {
@@ -119,6 +144,7 @@ export function matchJob(candidate, job) {
     skill_score: skillScore === null ? null : Math.round(skillScore * 100),
     experience_score: Math.round(exp.score * 100),
     title_score: Math.round(titleScore * 100),
+    domain_fit: Math.round(domainFit * 100),
     required_skills: required,
     preferred_skills: preferred,
     matching_skills: matching,
