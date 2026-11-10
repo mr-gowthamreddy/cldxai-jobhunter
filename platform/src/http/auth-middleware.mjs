@@ -23,8 +23,12 @@ export function parseCookies(header = '') {
   return out;
 }
 
-function cookieAttrs(maxAgeSec) {
-  const secure = config.cookieSecure || config.publicUrl.startsWith('https://');
+// Secure is decided per request: the same server can be reached over https
+// (a tunnel / reverse proxy, with TRUST_PROXY=true) and over plain
+// http://localhost at the same time, and a Secure cookie would never be sent
+// back on the plain-http side.
+function cookieAttrs(req, maxAgeSec) {
+  const secure = config.cookieSecure || Boolean(req?.secure);
   return `Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSec}${secure ? '; Secure' : ''}`;
 }
 
@@ -34,14 +38,14 @@ export function createSession(db, req, res, userId) {
   const expires = new Date(Date.now() + config.sessionTtlHours * 3600 * 1000).toISOString();
   db.prepare('INSERT INTO sessions (token_hash, user_id, csrf_token, ip, user_agent, expires_at) VALUES (?, ?, ?, ?, ?, ?)')
     .run(sha256(token), userId, csrf, clientIp(req), String(req.headers['user-agent'] || '').slice(0, 300), expires);
-  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=${token}; ${cookieAttrs(config.sessionTtlHours * 3600)}`);
+  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=${token}; ${cookieAttrs(req, config.sessionTtlHours * 3600)}`);
   return { csrf };
 }
 
 export function destroySession(db, req, res) {
   const token = parseCookies(req.headers.cookie)[SESSION_COOKIE];
   if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(sha256(token));
-  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=; ${cookieAttrs(0)}`);
+  res.setHeader('Set-Cookie', `${SESSION_COOKIE}=; ${cookieAttrs(req, 0)}`);
 }
 
 export function sessionMiddleware(getDb) {
@@ -81,9 +85,13 @@ export function csrfMiddleware(req, res, next) {
   // No session: allow only same-origin requests (blocks login CSRF from other sites).
   const origin = req.headers.origin;
   if (origin) {
-    const host = req.headers.host;
+    // Same-origin means: the Host we were reached on, the forwarded host when
+    // behind a trusted proxy/tunnel, or the configured PUBLIC_URL.
+    const allowed = new Set([String(req.headers.host || '').toLowerCase()]);
+    if (config.trustProxy && req.headers['x-forwarded-host']) allowed.add(String(req.headers['x-forwarded-host']).split(',')[0].trim().toLowerCase());
+    try { allowed.add(new URL(config.publicUrl).host.toLowerCase()); } catch { /* invalid PUBLIC_URL */ }
     let ok = false;
-    try { ok = new URL(origin).host === host; } catch { ok = false; }
+    try { ok = allowed.has(new URL(origin).host.toLowerCase()); } catch { ok = false; }
     if (!ok) return next(new HttpError(403, 'Cross-origin request refused.'));
   }
   next();

@@ -36,7 +36,7 @@ export function createApp({ db = getDb } = {}) {
         'base-uri': ["'self'"],
         'form-action': ["'self'"],
         'frame-ancestors': ["'self'"],
-        'upgrade-insecure-requests': config.publicUrl.startsWith('https://') ? [] : null,
+        'upgrade-insecure-requests': null, // the app may be served over http (LAN) and https (tunnel) at once
       },
     },
     crossOriginEmbedderPolicy: false,

@@ -162,6 +162,13 @@ There are no built-in default credentials. Nothing is hard-coded to any person.
 
 **Same network (home / office LAN):** keep `HOST=0.0.0.0`, set `PUBLIC_URL=http://<your-computer's-IP>:4300` and allow port 4300 through your firewall. When the server starts it prints the network address, e.g. `Network: http://192.168.1.20:4300`. Others open that address in their browser.
 
+**Internet, quick and free, from your own computer (Cloudflare quick tunnel):**
+1. Install `cloudflared` from https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/ (Windows: `winget install --id Cloudflare.cloudflared`).
+2. In `platform/.env` set `TRUST_PROXY=true`, then restart the app.
+3. With the app running, open a second terminal and run `cloudflared tunnel --url http://localhost:4300`.
+4. It prints an address like `https://some-random-words.trycloudflare.com`. Share that link. Set it as `PUBLIC_URL` too if you want password-reset links to use it.
+5. The link works only while your computer, the app and `cloudflared` are running, and it changes every time you restart the tunnel. For a permanent address, use a named Cloudflare tunnel with your own domain, or public hosting (below).
+
 **Public hosting (a VPS or any Node host):**
 1. Run `npm run start:all` (or the server and worker as two services under systemd / pm2 / Docker) with `NODE_ENV=production`.
 2. Put a TLS reverse proxy in front (Caddy, nginx), set `PUBLIC_URL=https://your.domain` and `TRUST_PROXY=true`. Cookies then become `Secure` automatically.
