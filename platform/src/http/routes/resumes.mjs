@@ -215,7 +215,7 @@ export function resumeRoutes(getDb) {
     res.setHeader('Content-Disposition', `${inline ? 'inline' : 'attachment'}; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(row.original_name)}`);
     res.setHeader('Cache-Control', 'private, no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    if (inline) res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; sandbox");
+    if (inline) res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; object-src 'self'; frame-ancestors 'self'");
     res.send(readFileSync(p));
   }));
 
