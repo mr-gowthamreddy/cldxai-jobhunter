@@ -17,7 +17,7 @@
     "fetch-now": "node src/worker.mjs --once",
     "dev": "node scripts/start-all.mjs",
     "start:all": "node scripts/start-all.mjs",
-    "test": "node --test --test-concurrency=1 tests/"
+    "test": "node --test --test-concurrency=1 \"tests/*.test.mjs\""
   },
   "dependencies": {
     "chart.js": "^4.4.7",

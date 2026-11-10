@@ -83,7 +83,7 @@ export function bandsForYears(years, bands = DEFAULT_EXPERIENCE_BANDS) {
 // Work arrangement. Explicit evidence only: a job that never says how it is
 // worked is "Unspecified" and is excluded from user-facing lists.
 const REMOTE_RE = /\b(fully[\s-]remote|100% remote|remote[\s-](first|only|friendly|position|role|opportunity|work)|work from home|wfh|work from anywhere|remote\b(?!\s*(sensing|control|monitoring|patient)))/i;
-const HYBRID_RE = /\b(hybrid(?![\s-]cloud)|(\d|two|three|four)\s*days?\s*(a|per)\s*week\s*(in|at)\s*(the\s*|our\s*)?office|flexible office|mobiles arbeiten|homeoffice[\s-]?(möglich|option|tage)|teilweise homeoffice)\b/i;
+const HYBRID_RE = /\b(hybrid(?![\s-]cloud)|([1-4]|one|two|three|four)\s*days?\s*(a|per)\s*week\s*(in|at)\s*(the\s*|our\s*)?office|flexible office|mobiles arbeiten|homeoffice[\s-]?(möglich|option|tage)|teilweise homeoffice)\b/i;
 const ONSITE_RE = /\b(on[\s-]?site|in[\s-]office|work from office|wfo|in[\s-]person|office[\s-]based|5 days (a|per) week in (the )?office|onsite|(work|working|based|join us|report) (from|in|at|to) (our|the) ([A-Z][\w-]+\s){0,3}offices?\b|vor ort|präsenz(?:pflicht)?)\b/i;
 const NOT_REMOTE_RE = /\b(not (a )?remote|no remote|non[\s-]remote|remote work is not)\b/i;
 
