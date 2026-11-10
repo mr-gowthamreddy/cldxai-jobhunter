@@ -44,7 +44,7 @@ export default async function applications(ctx, container) {
   if (stats.total) {
     const labels = APP_STATUSES.filter((s) => stats.by_status[s]);
     chart(statusChart.canvas, { type: 'doughnut', data: { labels, datasets: [{ data: labels.map((s) => stats.by_status[s]), backgroundColor: PALETTE, borderWidth: 0 }] }, options: { cutout: '62%', plugins: { legend: { position: 'right' } } } });
-    chart(weeklyChart.canvas, { type: 'line', data: { labels: stats.weekly.map((w) => `W${w.week.split('-')[1]}`), datasets: [{ data: stats.weekly.map((w) => w.n), borderColor: PALETTE[0], backgroundColor: 'rgba(99,102,241,.15)', fill: true, tension: .35, pointRadius: 3 }] }, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } } });
+    chart(weeklyChart.canvas, { type: 'line', data: { labels: stats.weekly.map((w) => `W${w.week.split('-')[1]}`), datasets: [{ data: stats.weekly.map((w) => w.n), borderColor: PALETTE[0], backgroundColor: 'rgba(59,130,246,.15)', fill: true, tension: .35, pointRadius: 3 }] }, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } } });
   }
 
   function board(list) {
@@ -98,7 +98,7 @@ export default async function applications(ctx, container) {
           h('td', { class: 'nowrap' }, fmtDate(a.applied_on)),
           h('td', { class: 'nowrap' }, a.interview_at ? fmtDate(a.interview_at, true) : '—'),
           h('td', null, a.match_score !== null ? `${a.match_score}%` : '—'),
-          h('td', null, a.source === 'manual' ? 'Manual' : 'Career-Ops'),
+          h('td', null, a.source === 'manual' ? 'Manual' : 'Job search'),
           h('td', { class: 'nowrap muted' }, timeAgo(a.updated_at)),
           h('td', null, h('a', { class: 'btn sm', href: `/app/applications/${a.id}` }, 'Open')));
       }))));

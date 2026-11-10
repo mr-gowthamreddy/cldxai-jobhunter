@@ -32,7 +32,7 @@ export function authRoutes(getDb) {
     db.prepare('INSERT INTO user_profiles (user_id) VALUES (?)').run(userId);
     db.prepare('INSERT INTO job_preferences (user_id) VALUES (?)').run(userId);
     logUser(db, { userId, action: 'register', ip: clientIp(req) });
-    notify(db, userId, { type: 'account', title: 'Welcome to Career-Ops', body: 'Start by uploading your resume so we can match you with active jobs.', link: '/app/resumes' });
+    notify(db, userId, { type: 'account', title: `Welcome to ${config.appName}`, body: 'Start by uploading your resume so we can match you with active jobs.', link: '/app/resumes' });
     if (status === 'pending') {
       return res.status(201).json({ ok: true, pending: true, message: 'Account created. An administrator must approve it before you can sign in.' });
     }
@@ -76,8 +76,8 @@ export function authRoutes(getDb) {
   }));
 
   r.get('/me', (req, res) => {
-    if (!req.user) return res.json({ user: null, registration: config.allowRegistration });
-    res.json({ user: req.user, csrf: req.session.csrf });
+    if (!req.user) return res.json({ user: null, registration: config.allowRegistration, app_name: config.appName });
+    res.json({ user: req.user, csrf: req.session.csrf, app_name: config.appName });
   });
 
   r.post('/forgot', limiter(5, 15), ah(async (req, res) => {
@@ -93,7 +93,7 @@ export function authRoutes(getDb) {
     const link = `${config.publicUrl}/reset-password?token=${encodeURIComponent(token)}`;
     await sendMail({
       to: user.email,
-      subject: 'Reset your Career-Ops password',
+      subject: `Reset your ${config.appName} password`,
       text: `Hi ${user.full_name},\n\nUse this link to choose a new password. It expires in ${config.passwordResetTtlMinutes} minutes and can be used once:\n\n${link}\n\nIf you did not ask for this, ignore this email; your password stays the same.\n`,
     });
     logUser(db, { userId: user.id, action: 'password_reset_requested', ip: clientIp(req) });

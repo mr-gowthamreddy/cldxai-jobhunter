@@ -1,6 +1,7 @@
 // SPA entry: session state, routing and the authenticated app shell.
 import { api, setCsrf } from './api.js';
 import { h, clear, icon, initials, toast, timeAgo } from './ui.js';
+import { logo, setAppName, brandName } from './brand.js';
 
 export const state = { user: null, unread: 0, registration: true };
 
@@ -48,6 +49,7 @@ export async function refreshSession() {
   const me = await api('/auth/me');
   state.user = me.user;
   state.registration = me.registration !== false;
+  setAppName(me.app_name);
   setCsrf(me.csrf || null);
   return me.user;
 }
@@ -70,6 +72,7 @@ export async function render() {
   if (!route.public && !state.user) { navigate(`/login?next=${encodeURIComponent(location.pathname + location.search)}`, { replace: true }); return; }
   if (route.guestOnly && state.user) { navigate('/app', { replace: true }); return; }
   if (route.admin && state.user?.role !== 'admin') { clear(root).append(shell(route, h('div', { class: 'card' }, h('h2', null, 'Administrators only'), h('p', { class: 'muted' }, 'You do not have access to this section.')))); return; }
+  document.title = brandName();
   const mod = await route.page();
   if (seq !== renderSeq) return;
   const ctx = { params, query: new URLSearchParams(location.search), navigate, state };
@@ -122,7 +125,7 @@ function shell(route, content) {
       h('a', { class: `nav-link ${route.nav === 'admin' ? 'active' : ''}`, href: '/admin', onclick: closeNav }, icon('shield'), 'Admin console'));
   }
   const sidebar = h('aside', { class: 'sidebar', 'aria-label': 'Main navigation' },
-    h('a', { class: 'brand', href: '/app' }, h('span', { class: 'brand-mark' }, 'C'), 'Career-Ops'),
+    logo({ href: '/app' }),
     sections,
     h('div', { class: 'sidebar-foot' },
       h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center', padding: '6px 8px' } },

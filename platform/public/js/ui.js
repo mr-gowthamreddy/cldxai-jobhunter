@@ -276,7 +276,7 @@ export function loadCharts() {
   return chartLib;
 }
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-export const PALETTE = ['#6366f1', '#14b8a6', '#f59e0b', '#ec4899', '#3b82f6', '#8b5cf6', '#22c55e', '#ef4444', '#06b6d4', '#a3a3a3'];
+export const PALETTE = ['#3b82f6', '#0ea5e9', '#a1a1aa', '#f59e0b', '#22c55e', '#8b5cf6', '#ef4444', '#14b8a6', '#ec4899', '#52525b'];
 export async function chart(canvas, config) {
   const Chart = await loadCharts();
   Chart.defaults.font.family = css('--font');

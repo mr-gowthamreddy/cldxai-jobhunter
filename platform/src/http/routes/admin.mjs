@@ -83,7 +83,7 @@ export function adminRoutes(getDb) {
     if (changes.status) {
       db.prepare("UPDATE users SET status = ?, updated_at = datetime('now') WHERE id = ?").run(changes.status, id);
       if (changes.status !== 'active') db.prepare('DELETE FROM sessions WHERE user_id = ?').run(id);
-      if (changes.status === 'active' && user.status === 'pending') notify(db, id, { type: 'account', title: 'Your account was approved', body: 'You can now use every Career-Ops feature.' });
+      if (changes.status === 'active' && user.status === 'pending') notify(db, id, { type: 'account', title: 'Your account was approved', body: `You can now use every ${config.appName} feature.` });
     }
     if (changes.role) db.prepare("UPDATE users SET role_id = (SELECT id FROM roles WHERE name = ?), updated_at = datetime('now') WHERE id = ?").run(changes.role, id);
     if (changes.is_verified !== undefined) db.prepare('UPDATE users SET is_verified = ? WHERE id = ?').run(changes.is_verified, id);

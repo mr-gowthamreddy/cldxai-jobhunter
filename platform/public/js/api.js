@@ -24,7 +24,7 @@ export async function api(path, { method = 'GET', body, query } = {}) {
   try {
     res = await fetch(url, { method, headers, body: body !== undefined ? JSON.stringify(body) : undefined, credentials: 'same-origin' });
   } catch {
-    throw new ApiError(0, 'Cannot reach the server. Check that Career-Ops is running.');
+    throw new ApiError(0, 'Cannot reach the server. Check that the app is running (start.bat / start.sh).');
   }
   const data = res.headers.get('content-type')?.includes('json') ? await res.json().catch(() => ({})) : {};
   if (!res.ok) {

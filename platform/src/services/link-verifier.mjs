@@ -24,7 +24,7 @@ export function applyControls(html = '') {
   for (const m of h.matchAll(/<input\b[^>]*type\s*=\s*["']?submit["']?[^>]*value\s*=\s*["']([^"']{1,80})["']/gi)) out.push(m[1]);
   return out;
 }
-const UA = 'Mozilla/5.0 (compatible; CareerOpsPlatform/1.0; +https://github.com/career-ops-hq/career-ops)';
+const UA = 'Mozilla/5.0 (compatible; JobHunterLinkCheck/1.0; +https://github.com/career-ops-hq/career-ops)';
 
 /**
  * Check one URL. Returns { result: 'active'|'expired'|'uncertain'|'broken', code, reason, finalUrl, status }.

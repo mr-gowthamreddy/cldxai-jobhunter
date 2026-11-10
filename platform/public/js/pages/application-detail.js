@@ -23,13 +23,13 @@ export default async function applicationDetail(ctx, container) {
   const form = h('form', { class: 'card' },
     h('div', { class: 'card-head' }, h('h3', null, 'Application details'), statusBadge(a.status)),
     h('div', { class: 'grid-2' }, field('Company', company), field('Job title', title)),
-    field('Job URL', url, manual ? null : 'Linked to a Career-Ops job; company, title and URL come from the posting.'),
+    field('Job URL', url, manual ? null : 'Linked to a job found in this app; company, title and URL come from the posting.'),
     h('div', { class: 'grid-3' }, field('Status', status), field('Applied on', applied), field('Interview date', interview)),
     field('Status change note', eventNote),
     field('Notes', notes),
     h('div', { class: 'btn-row' }, save,
       a.job_url ? h('a', { class: 'btn', href: a.job_url, target: '_blank', rel: 'noopener noreferrer' }, 'Open posting', icon('external')) : null,
-      a.job_id ? h('a', { class: 'btn', href: `/app/jobs/${a.job_id}` }, 'View job in Career-Ops') : null,
+      a.job_id ? h('a', { class: 'btn', href: `/app/jobs/${a.job_id}` }, 'View job details') : null,
       h('button', { class: 'btn danger', type: 'button', style: { marginLeft: 'auto' }, onclick: async () => {
         if (!(await confirmDialog('This removes the application and its history.', { okText: 'Delete', danger: true }))) return;
         try { await api(`/applications/${a.id}`, { method: 'DELETE' }); toast('Application deleted'); ctx.navigate('/app/applications'); } catch (err) { errorToast(err); }

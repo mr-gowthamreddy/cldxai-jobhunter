@@ -31,7 +31,7 @@ export async function notifyNewJobs(db, newJobIds = []) {
         notify(db, u.id, { type: 'new_matches', title: `${scored.length} new job${scored.length > 1 ? 's' : ''} match your resume`, body: `Top: ${top}`, link: '/app/recommendations?fresh=1' });
         notified++;
         if (u.email_ok && mailConfigured()) {
-          await sendMail({ to: u.email, subject: `Career-Ops: ${scored.length} new matching jobs`, text: `Hi ${u.full_name},\n\nNew jobs matching your resume:\n\n${scored.slice(0, 10).map((s) => `• ${s.job.title} — ${s.job.company} (${s.match.score}% match)\n  ${s.job.apply_url}`).join('\n')}\n\nSee all: ${config.publicUrl}/app/recommendations\n` }).catch(() => {});
+          await sendMail({ to: u.email, subject: `${config.appName}: ${scored.length} new matching jobs`, text: `Hi ${u.full_name},\n\nNew jobs matching your resume:\n\n${scored.slice(0, 10).map((s) => `• ${s.job.title} — ${s.job.company} (${s.match.score}% match)\n  ${s.job.apply_url}`).join('\n')}\n\nSee all: ${config.publicUrl}/app/recommendations\n` }).catch(() => {});
         }
       }
     }

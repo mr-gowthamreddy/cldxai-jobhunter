@@ -1,18 +1,19 @@
 import { h, icon, field, formError, busy } from '../ui.js';
 import { api, setCsrf } from '../api.js';
 import { state, navigate } from '../main.js';
+import { logo } from '../brand.js';
 
 function frame(title, subtitle, form, foot) {
   return h('div', { class: 'auth-wrap' },
     h('div', { class: 'auth-side' },
-      h('a', { class: 'brand', href: '/' }, h('span', { class: 'brand-mark' }, 'C'), 'Career-Ops'),
+      logo({ href: '/', size: 'lg on-dark' }),
       h('div', null,
         h('h2', null, 'Your job search, organised.'),
         h('p', null, 'Resume-based matching, daily verified listings and a private application tracker — for every profession.'),
         h('div', { class: 'chips', style: { marginTop: '18px' } }, ['Explainable matches', 'Direct employer links', 'Private by default'].map((t) => h('span', { class: 'chip', style: { background: 'rgba(255,255,255,.15)', color: '#fff' } }, t)))),
-      h('small', { style: { color: 'rgba(255,255,255,.7)' } }, 'Open source · runs on your own server')),
+      h('small', { style: { color: 'rgba(255,255,255,.6)' } }, 'Private by design · your data stays on your server')),
     h('div', { class: 'auth-main' }, h('div', { class: 'auth-card' },
-      h('a', { class: 'brand', href: '/', style: { paddingLeft: 0 } }, h('span', { class: 'brand-mark' }, 'C'), 'Career-Ops'),
+      h('div', { class: 'auth-brand-sm' }, logo({ href: '/' })),
       h('h1', null, title), h('p', { class: 'muted' }, subtitle), form, foot ? h('p', { class: 'muted', style: { marginTop: '18px', textAlign: 'center' } }, foot) : null)));
 }
 

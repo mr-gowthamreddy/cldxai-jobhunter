@@ -30,6 +30,7 @@ function resolveFromRoot(p) {
 const dataDir = resolveFromRoot(env.DATA_DIR || '../data/platform');
 
 export const config = {
+  appName: (env.APP_NAME || 'CloudX AI JobHunter').trim().slice(0, 60),
   env: env.NODE_ENV || 'development',
   isProduction: (env.NODE_ENV || 'development') === 'production',
   host: env.HOST || '0.0.0.0',
@@ -70,7 +71,7 @@ export const config = {
     secure: bool(env.SMTP_SECURE, false),
     user: env.SMTP_USER || '',
     pass: env.SMTP_PASS || '',
-    from: env.MAIL_FROM || 'Career-Ops <no-reply@localhost>',
+    from: env.MAIL_FROM || `${(env.APP_NAME || 'CloudX AI JobHunter').trim()} <no-reply@localhost>`,
   },
 
   // Google Sheets (optional reporting layer)

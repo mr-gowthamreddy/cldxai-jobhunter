@@ -14,7 +14,7 @@ ensureBaseData(db);
 const app = createApp();
 
 const server = app.listen(config.port, config.host, () => {
-  console.log(`\nCareer-Ops Platform is running`);
+  console.log(`\n${config.appName} is running`);
   console.log(`  Local:    http://localhost:${config.port}`);
   if (config.host === '0.0.0.0' || config.host === '::') {
     for (const addrs of Object.values(os.networkInterfaces())) {

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ExcelJS from 'exceljs';
+import { config } from '../../config.mjs';
 import { ah, HttpError, str, idParam, dateStr, httpUrl, oneOf } from '../util.mjs';
 import { candidateForUser, decodeJob, scoreJobs, VISIBLE_JOB_WHERE } from '../../services/matching.mjs';
 import { interviewPrep } from '../../lib/insights.mjs';
@@ -100,7 +101,7 @@ export function applicationRoutes(getDb) {
       return res.send('﻿' + csv);
     }
     const wb = new ExcelJS.Workbook();
-    wb.creator = 'Career-Ops';
+    wb.creator = config.appName;
     const ws = wb.addWorksheet('Applications', { views: [{ state: 'frozen', ySplit: 1 }] });
     ws.columns = header.map((h) => ({ header: h, width: h === 'Notes' ? 50 : h === 'Job URL' ? 45 : 18 }));
     ws.getRow(1).font = { bold: true };

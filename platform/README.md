@@ -1,4 +1,4 @@
-# Career-Ops Platform
+# CloudX AI JobHunter
 
 A multi-user web application built on top of career-ops. Anyone can register, upload a resume, get matched with **active, verified** job openings, and run their whole job search from a private dashboard. Administrators manage users, job sources and the daily job pipeline.
 
@@ -109,6 +109,7 @@ All settings live in `platform/.env`; `npm run setup` creates it from `.env.exam
 
 | Variable | Default | Purpose |
 |---|---|---|
+| `APP_NAME` | `CloudX AI JobHunter` | Product name shown in the app, browser tab, emails and exports. The logo files are in `public/brand/` (`wordmark.svg`, `mark.svg`, `icon-*.png`, `og.png`). |
 | `HOST` | `0.0.0.0` | Interface to listen on. `0.0.0.0` lets other devices on your network connect; `127.0.0.1` restricts the app to this computer. |
 | `PORT` | `4300` | HTTP port. |
 | `PUBLIC_URL` | `http://localhost:4300` | The address people use. Used in password-reset and notification links. Set it to your LAN IP or https domain when sharing. |

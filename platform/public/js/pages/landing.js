@@ -1,5 +1,6 @@
 import { h, icon, companyLogo, scoreRing, arrangementBadge } from '../ui.js';
 import { state, setTheme } from '../main.js';
+import { logo, brandName } from '../brand.js';
 
 const FEATURES = [
   ['upload', 'Drag-and-drop resume parsing', 'Upload a PDF, DOC or DOCX. We extract your skills, experience, education and certifications into a profile you can edit.'],
@@ -23,7 +24,7 @@ export default function landing() {
     : h('a', { class: 'btn primary lg', href: '/register' }, 'Create a free account');
   return h('div', { class: 'landing' },
     h('nav', { class: 'lnav' },
-      h('a', { class: 'brand', href: '/' }, h('span', { class: 'brand-mark' }, 'C'), 'Career-Ops'),
+      logo({ href: '/', size: 'lg' }),
       h('div', { class: 'links' },
         h('button', { class: 'btn ghost icon-only', 'aria-label': 'Toggle dark mode', onclick: () => { setTheme(dark ? 'light' : 'dark'); location.reload(); } }, icon(dark ? 'sun' : 'moon')),
         state.user ? h('a', { class: 'btn primary', href: '/app' }, 'Dashboard') : [
@@ -32,9 +33,9 @@ export default function landing() {
         ])),
     h('section', { class: 'hero' },
       h('div', null,
-        h('span', { class: 'badge primary', style: { marginBottom: '16px' } }, icon('zap'), 'Open source · built on career-ops'),
+        h('span', { class: 'badge primary', style: { marginBottom: '16px' } }, icon('zap'), 'AI-powered job matching'),
         h('h1', null, 'Find jobs that ', h('em', null, 'actually fit'), ' your resume.'),
-        h('p', { class: 'lead' }, 'Upload your resume once. Career-Ops matches you with active, verified openings — remote, hybrid or in-office — explains every score, and keeps your whole job search organised in one private workspace.'),
+        h('p', { class: 'lead' }, `Upload your resume once. ${brandName()} matches you with active, verified openings — remote, hybrid or in-office — explains every score, and keeps your whole job search organised in one private workspace.`),
         h('div', { class: 'btn-row' }, cta, state.user ? null : h('a', { class: 'btn lg', href: '/login' }, 'I already have an account')),
         h('div', { class: 'chips', style: { marginTop: '22px' } },
           ['Data Engineering', 'Snowflake', 'Databricks', 'Power BI', 'Software', 'Product', 'Design', 'Marketing'].map((c) => h('span', { class: 'chip neutral' }, c)))),
@@ -46,5 +47,5 @@ export default function landing() {
         h('p', { class: 'muted', style: { margin: '6px 0 0', fontSize: '12px', textAlign: 'center' } }, 'Illustration — your dashboard shows real, live postings.'))),
     h('section', { class: 'features' }, FEATURES.map(([ic, t, d]) => h('div', { class: 'card feature' }, h('div', { class: 'ico' }, icon(ic)), h('h3', null, t), h('p', { class: 'muted', style: { margin: 0 } }, d)))),
     h('section', { class: 'trust' }, ['Remote', 'Hybrid', 'Work from office', 'Fresher to 10+ years', 'Daily refresh', 'CSV & Excel export'].map((t) => h('span', { class: 'badge' }, icon('check'), t))),
-    h('footer', { class: 'lfoot' }, 'Career-Ops — the human decides. We never apply on your behalf. · ', h('a', { href: 'https://github.com/career-ops-hq/career-ops', target: '_blank', rel: 'noopener' }, 'Source on GitHub')));
+    h('footer', { class: 'lfoot' }, `© ${new Date().getFullYear()} ${brandName()} · You decide where to apply; we never apply on your behalf. · Powered by the open-source `, h('a', { href: 'https://github.com/career-ops-hq/career-ops', target: '_blank', rel: 'noopener' }, 'career-ops'), ' engine.'));
 }
