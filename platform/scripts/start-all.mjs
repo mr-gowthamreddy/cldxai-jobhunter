@@ -9,8 +9,8 @@ import { config } from '../src/config.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const children = [];
 function run(name, script) {
-  const child = spawn(process.execPath, [script], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
-  const prefix = (s) => s.toString().split(/\r?\n/).filter(Boolean).map((l) => `[${name}] ${l}`).join('\n') + '\n';
+  const child = spawn(process.execPath, [script], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, COPS_STARTED_BY: 'start-all' } });
+  const prefix = (s) => s.toString().split(/\r?\n/).filter(Boolean).map((l) => (l.startsWith(`[${name}]`) ? l : `[${name}] ${l}`)).join('\n') + '\n';
   child.stdout.on('data', (d) => process.stdout.write(prefix(d)));
   child.stderr.on('data', (d) => process.stderr.write(prefix(d)));
   child.on('exit', (code) => { console.log(`[${name}] exited with code ${code}`); if (!stopping) stopAll(code ?? 1); });

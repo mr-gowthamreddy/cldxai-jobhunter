@@ -17,7 +17,8 @@
     "fetch-now": "node src/worker.mjs --once",
     "dev": "node scripts/start-all.mjs",
     "start:all": "node scripts/start-all.mjs",
-    "test": "node --test --test-concurrency=1 \"tests/*.test.mjs\""
+    "test": "node --test --test-concurrency=1 \"tests/*.test.mjs\"",
+    "test:ui": "node tests/e2e/ui-smoke.cjs"
   },
   "dependencies": {
     "chart.js": "^4.4.7",

@@ -59,7 +59,7 @@ export const config = {
   fetchConcurrency: int(env.FETCH_CONCURRENCY, 4),
   fetchSourceTimeoutMs: int(env.FETCH_SOURCE_TIMEOUT_MS, 60_000),
   expireAfterMissedFetches: int(env.EXPIRE_AFTER_MISSED_FETCHES, 2),
-  linkCheckBudget: int(env.LINK_CHECK_BUDGET, 400),
+  linkCheckBudget: int(env.LINK_CHECK_BUDGET, 1500),
   linkRecheckDays: int(env.LINK_RECHECK_DAYS, 3),
   maxJobAgeDays: int(env.MAX_JOB_AGE_DAYS, 60),
 
@@ -79,7 +79,7 @@ export const config = {
     spreadsheetId: env.GOOGLE_SHEETS_SPREADSHEET_ID || '',
     serviceAccountEmail: env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
     privateKey: (env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
-    credentialsFile: env.GOOGLE_APPLICATION_CREDENTIALS || '',
+    credentialsFile: env.GOOGLE_APPLICATION_CREDENTIALS ? resolveFromRoot(env.GOOGLE_APPLICATION_CREDENTIALS) : '',
     tabPrefix: env.GOOGLE_SHEETS_TAB_PREFIX || 'Jobs',
     maxDescriptionChars: int(env.GOOGLE_SHEETS_MAX_DESCRIPTION_CHARS, 2000),
   },

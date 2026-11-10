@@ -27,7 +27,7 @@ export async function upsertAdmin(conn, { email, password, name }) {
   const existing = conn.prepare('SELECT id FROM users WHERE email = ?').get(mail);
   const adminRole = conn.prepare("SELECT id FROM roles WHERE name = 'admin'").get().id;
   if (existing) {
-    conn.prepare("UPDATE users SET role_id = ?, status = 'active', is_verified = 1 WHERE id = ?").run(adminRole, existing.id);
+    conn.prepare("UPDATE users SET role_id = ?, status = 'active', is_verified = 1, failed_logins = 0, locked_until = NULL WHERE id = ?").run(adminRole, existing.id);
     if (password) {
       const problems = passwordProblems(password);
       if (problems.length) throw new Error(`Password needs ${problems.join(', ')}.`);

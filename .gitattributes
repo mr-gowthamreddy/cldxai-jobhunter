@@ -38,3 +38,6 @@ cops       text eol=lf
 *.ico   binary
 *.woff2 binary
 *.pdf   binary
+
+# Windows launcher must keep CRLF line endings
+*.bat text eol=crlf

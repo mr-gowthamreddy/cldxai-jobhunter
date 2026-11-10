@@ -22,7 +22,7 @@ const server = app.listen(config.port, config.host, () => {
     }
   }
   console.log(`  Database: ${config.dbPath}`);
-  console.log(`  Scheduler mode: ${config.schedulerMode}${config.schedulerMode === 'worker' ? ' (start the worker with: npm run worker)' : ''}\n`);
+  console.log(`  Scheduler mode: ${config.schedulerMode}${config.schedulerMode === 'worker' && process.env.COPS_STARTED_BY !== 'start-all' ? ' (start the worker with: npm run worker)' : ''}\n`);
 });
 
 let scheduler = null;

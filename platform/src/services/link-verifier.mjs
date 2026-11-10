@@ -71,7 +71,7 @@ export async function checkLink(url, { timeoutMs = 15000, fetchImpl = fetchRespo
 }
 
 /** Verify a batch of jobs' links and persist the outcome. */
-export async function verifyJobLinks(db, { budget = 150, recheckDays = 3, concurrency = 6, runId = null, log = () => {}, check = checkLink } = {}) {
+export async function verifyJobLinks(db, { budget = 150, recheckDays = 3, concurrency = 10, runId = null, log = () => {}, check = checkLink } = {}) {
   const rows = db.prepare(`
     SELECT id, apply_url, link_status FROM jobs
     WHERE status = 'active' AND work_arrangement != 'Unspecified'
