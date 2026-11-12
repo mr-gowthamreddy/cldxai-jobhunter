@@ -47,5 +47,5 @@ export default function landing() {
         h('p', { class: 'muted', style: { margin: '6px 0 0', fontSize: '12px', textAlign: 'center' } }, 'Illustration — your dashboard shows real, live postings.'))),
     h('section', { class: 'features' }, FEATURES.map(([ic, t, d]) => h('div', { class: 'card feature' }, h('div', { class: 'ico' }, icon(ic)), h('h3', null, t), h('p', { class: 'muted', style: { margin: 0 } }, d)))),
     h('section', { class: 'trust' }, ['Remote', 'Hybrid', 'Work from office', 'Fresher to 10+ years', 'Daily refresh', 'CSV & Excel export'].map((t) => h('span', { class: 'badge' }, icon('check'), t))),
-    h('footer', { class: 'lfoot' }, `© ${new Date().getFullYear()} ${brandName()} · You decide where to apply; we never apply on your behalf. · Powered by the open-source `, h('a', { href: 'https://github.com/career-ops-hq/career-ops', target: '_blank', rel: 'noopener' }, 'career-ops'), ' engine.'));
+    h('footer', { class: 'lfoot' }, `© ${new Date().getFullYear()} ${brandName()} · You decide where to apply; we never apply on your behalf. · Based on the open-source `, h('a', { href: 'https://github.com/career-ops-hq/career-ops', target: '_blank', rel: 'noopener' }, 'career-ops'), ' project (MIT licence); not affiliated with or endorsed by it.'));
 }
